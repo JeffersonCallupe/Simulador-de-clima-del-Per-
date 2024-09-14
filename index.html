@@ -1,28 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de clima de ciudades en Perú</title>
-    <link rel="stylesheet" href="Assets/style.css">
+    <title>Clima de Ciudades</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Simulador de clima en el Perú</h1>
+    <header class="header">
+        <h1>Búsqueda de Clima por Ciudad</h1>
+    </header>
+    
+    <section class="container">
+        <input type="text" id="ciudad" placeholder="Ingresa una ciudad" />
+        <button id="buscar">Buscar Ciudad</button>
+        <div id="resultado"></div>
+    </section>
+    
 
+    <h2>Ciudades con temperatura mayor a 20°C:</h2>
+    <ul id="ciudadesCalientes"></ul>
 
-        <label for="ciudad">Ingrese una ciudad</label>
-        <input type="text" id="ciudad" placeholder="Ej: Lima">
-
-        <button id="buscar"> Buscar </button>
-
-    <br>
-    <div class="container" id="resultado">
-
-    </div>
-
-
-
-
-    <script src="Assets/index.js"></script>
+    <script src="index.js"></script>
 </body>
 </html>

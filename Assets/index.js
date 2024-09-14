@@ -1,83 +1,84 @@
-// Creación de objetos dentro de un array 
 
+// Clase para las ciudaddes 
+class Ciudad {
+    constructor(nombre, temperatura, humedad) {
+        this.nombre = nombre;
+        this.temperatura = temperatura;
+        this.humedad = humedad;
+    }
+}
+
+// Clase para la búsqueda y filtrado
+class GestorDeCiudades {
+    constructor(ciudades) {
+        this.ciudades = ciudades;
+    }
+
+    // Método para buscar ciudad
+    buscarCiudad(nombreCiudad) {
+        let ciudadEncontrada = this.ciudades.find(c => c.nombre.toLowerCase() === nombreCiudad.toLowerCase());
+        return ciudadEncontrada;
+    }
+
+    // Método para obtener ciudades con temperatura 
+    obtenerCiudadesCalientes(temperaturaMinima) {
+        return this.ciudades.filter(c => c.temperatura > temperaturaMinima);
+    }
+}
+
+// Array de objetos de las ciudadades 
 let ciudades = [
-    { nombre: "Lima", temperatura: 20, humedad: 70 },
-    { nombre: "Cusco", temperatura: 15, humedad: 50 },
-    { nombre: "Arequipa", temperatura: 18, humedad: 40 },
-    { nombre: "Trujillo", temperatura: 22, humedad: 65 },
-    { nombre: "Iquitos", temperatura: 25, humedad: 80 },
-    { nombre: "Cajamarca", temperatura: 14, humedad: 55 },
-    { nombre: "Ayacucho", temperatura: 17, humedad: 45 },
-    { nombre: "Chiclayo", temperatura: 24, humedad: 75 }, 
-    { nombre: "Piura", temperatura: 26, humedad: 70 },   
-    { nombre: "Huancayo", temperatura: 16, humedad: 58 }, 
-    { nombre: "Puno", temperatura: 10, humedad: 60 },   
-    { nombre: "Tumbes", temperatura: 28, humedad: 85 },  
-    { nombre: "Tacna", temperatura: 18, humedad: 45 },  
-    { nombre: "Puerto Maldonado", temperatura: 27, humedad: 82 }
+    new Ciudad("Lima", 20, 70),
+    new Ciudad("Cusco", 15, 50),
+    new Ciudad("Arequipa", 18, 40),
+    new Ciudad("Trujillo", 22, 65),
+    new Ciudad("Iquitos", 25, 80),
+    new Ciudad("Cajamarca", 14, 55),
+    new Ciudad("Ayacucho", 17, 45),
+    new Ciudad("Chiclayo", 24, 75),
+    new Ciudad("Piura", 26, 70),
+    new Ciudad("Huancayo", 16, 58),
+    new Ciudad("Puno", 10, 60),
+    new Ciudad("Tumbes", 28, 85),
+    new Ciudad("Tacna", 18, 45),
+    new Ciudad("Puerto Maldonado", 27, 82)
 ];
 
 
-// La siguiente función realiza la búsqueda de la ciudad y retorna los valores de la temperatura y humedad
-const buscarCiudad = ciudad => {
+localStorage.setItem("ciudades", JSON.stringify(ciudades));
 
-    let ciudadEncontrada = ciudades.find(c => c.nombre.toLowerCase() === ciudad.toLowerCase());
+const ciudadesGuardadas = JSON.parse(localStorage.getItem("ciudades"));
+
+const gestor = new GestorDeCiudades(ciudadesGuardadas);
+
+// Esta función busca las ciudades y muestra si está o no en la lista 
+const buscarCiudad = ciudad => {
+    let ciudadEncontrada = gestor.buscarCiudad(ciudad);
 
     let resultadoDiv = document.getElementById("resultado");
 
     if (ciudadEncontrada) {
-        alert("Ciudad encontrada")
-        resultadoDiv.textContent = `Temperatura actual: ${ciudadEncontrada.temperatura}°C, 
-                                    Humedad: ${ciudadEncontrada.humedad}%`;
+        const { temperatura, humedad } = ciudadEncontrada; // Aquí desestructura para extraer temperatura y humedad
+        resultadoDiv.textContent = `Temperatura actual: ${temperatura}°C, Humedad: ${humedad}%`;
     } else {
-        alert(`${ciudad} no está en la lista de ciudades.`);
+        resultadoDiv.textContent = `${ciudad} no está en la lista de ciudades.`;
     }
 };
 
 
 document.getElementById("buscar").addEventListener("click", () => {
     let ciudad = document.getElementById("ciudad").value; 
-    buscarCiudad(ciudad);
+    buscarCiudad(ciudad); 
 });
 
 
-// Esta función permite realizar un resumen de ciudades con temperatura mayor a un valor determinado 
-const ciudadesCalientes = ciudades.filter(c => c.temperatura > 20);
-console.log("Ciudades con temperatura mayor a 20°C:", ciudadesCalientes);
+const ciudadesCalientes = gestor.obtenerCiudadesCalientes(20);
+let listaCiudades = document.getElementById("ciudadesCalientes");
 
-
-
-
-/* ------------------------------------------------------------------------------------- */
-
-
-// Aquí presento otra alternativa a la función de buscarCiudad usando bucles
-
-
-/*
-const buscarCiudad = ciudad => {
-    ciudad = ciudad.toLowerCase();
-    let ciudadEncontrada = null;
-
-    for (let i = 0; i < ciudades.length; i++) {
-        if (ciudades[i].nombre.toLowerCase() === ciudad) {
-            ciudadEncontrada = ciudades[i];
-            break; 
-        }
-    }
-
-    let resultadoDiv = document.getElementById("resultado");
-
-    if (ciudadEncontrada) {
-        resultadoDiv.textContent = `${ciudadEncontrada.nombre} está en la lista. 
-        Temperatura actual: ${ciudadEncontrada.temperatura}°C, 
-        Humedad: ${ciudadEncontrada.humedad}%`;
-    } else {
-        alert(`${ciudad} no está en la lista de ciudades.`);
-    }
-};
-*/
-
-
-
-
+for (let i = 0; i < ciudadesCalientes.length; i++) {
+    let item = document.createElement("li");
+    // Alias en desestructuración
+    const { nombre: ciudadNombre, temperatura } = ciudadesCalientes[i];
+    item.textContent = `${ciudadNombre}: ${temperatura}°C`;
+    listaCiudades.appendChild(item);
+}
